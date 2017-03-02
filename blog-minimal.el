@@ -18,11 +18,14 @@
 
 (defun bm/init ()
   "init directory structure for blog minimal"
-  (make-directory (concat bm/blog-main-dir "org") t)
-  (copy-directory "./templates" bm/blog-main-dir)
-  (copy-directory "./media" bm/blog-main-dir)
-  (copy-file "./about.org" bm/blog-main-dir t)
-  (bm/render-all-org-files))
+  (if (string= bm/blog-main-dir "")
+      (message-box "bm/blog-main-dir is nil\n Please set a dir for your blog.")
+    (progn
+      (make-directory (concat bm/blog-main-dir "org") t)
+      (copy-directory "./templates" bm/blog-main-dir)
+      (copy-directory "./media" bm/blog-main-dir)
+      (copy-file "./about.org" bm/blog-main-dir t)
+      (bm/render-all-org-files))))
 
 
 (defun bm/get-org-article-property (org-file-name)

@@ -8,7 +8,9 @@
 
 
 ;;; easily config line start--------------------------------------------------
-(defconst bm/blog-main-dir "/home/thief/practice/website/")
+(defconst bm/blog-main-dir "/home/thief/practice/org/test_blog/")
+
+(defconst bm/package-dir  "")
 
 (defconst bm/mustache-templates-dir (concat bm/blog-main-dir "templates/")
   "a dir for mustache templates")
@@ -19,7 +21,7 @@
 (defconst bm/avatar-path  "media/img/avatar4.png"
   "specifify path of avatar image.")
 
-(defconst bm/github-link "https://github.com/thiefuniverse" "It's your github-link! Please change it~")
+(defcustom bm/github-link "https://github.com/thiefuniverse" "It's your github-link! Please change it~")
 
 (defconst bm/page-title "Thief's Valley")
 
@@ -128,6 +130,10 @@
    ;;;for blog-comment
 	 ("bm_duoshuoID" bm/duoshuoID)
 	 )))
+
+
+(defun bm/set-package-dir ()
+  (setq bm/package-dir (file-name-directory (symbol-file 'bm/read-org-option))))
 
 (provide 'bm-vars)
 ;;; bm-vars.el ends here
