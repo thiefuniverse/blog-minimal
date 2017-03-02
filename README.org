@@ -1,1 +1,9 @@
-* blog-minimal
+#+TITLE: blog-minimal
+#+OPTIONS: toc:t
+
+* Introduction
+** a very simple static site generator based on org mode
+
+* Usage
+** load package
+

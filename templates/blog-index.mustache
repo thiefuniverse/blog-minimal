@@ -1,0 +1,38 @@
+{{! ARGS: blog-info, blog-index, title-uri, title, blog-tags, tags-uri, tag, tag-number }}
+
+
+ <h1>
+    <b>{{blog-info}}</b>
+ </h1>
+
+<div>
+  <h2>
+  <nav class="blog-nav">
+    <a href="./index.html"><b>Articles</b></a>&nbsp;&nbsp;
+
+{{!    <a href="./tags.html"><b>Tags</b></a>&nbsp;&nbsp;}}
+{{!    <a href="/"><b>Search</b></a>&nbsp;&nbsp;}}
+  </nav>
+  </h2>
+</div>
+
+<div class="blog-index">
+<ul>
+{{#blog-index}}
+  <h2>
+    <li>
+      ✡&nbsp;<a href="{{title-uri}}"><spe class="article-date">{{date}}</spe>&nbsp;{{title}}</a>
+    </li>
+  </h2>
+{{/blog-index}}
+
+{{#blog-tags}}
+  <h2>
+    <li>
+      ✡&nbsp;<a href="{{title-uri}}"><spe class="article-date">{{date}}</spe>&nbsp;{{title}}</a>
+    </li>
+  </h2>
+{{/blog-tags}}
+</ul>
+
+</div>

@@ -1,0 +1,14 @@
+<h1>{{current-title}}</h1>
+<br>
+{{! Keywords:}}
+<nav class="main-nav">
+  <ul class="keywords">
+    {{#article-keywords}}
+      <li> <img class="keywords-image" src="{{high-dir}}media/img/keywords.png">{{keyword}}</li>
+    {{/article-keywords}}
+
+  </ul>
+  <a id="to_home" href="{{high-dir}}index.html"><img src="{{high-dir}}media/img/to_home.png"><b>Home</b></a>
+
+  {{! add tag,keywords elegantly }}
+</nav>

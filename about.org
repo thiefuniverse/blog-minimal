@@ -1,0 +1,12 @@
+#+TITLE: A Enthusiastic Programmer -- FlyThief
+
+#+OPTIONS: toc:nil num:nil
+
+* Who I am?
+** Now I'm a Junior  CS student at BUPT (Beijing University of Post and Telecomunication)
+** I like programming and computer!
+
+* Skills
+** C++ (basic)
+** elisp (like emacs)
+** Be skilled at linux environment.

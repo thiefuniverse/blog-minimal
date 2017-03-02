@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en-us">
+{{> header}}
+<body class="wrapper">
+  <header>
+    {{> person-zone}}
+    {{> nav}}
+  </header>
+  <section id="blog-index">
+   <br><br><br>    <br><br><br>
+   <h1>Sorry~ No Url Like This~</h1>
+     <h1><span id="count_time">5</span>&nbsp;seconds later you will go to <a href="index.html">home page</a>.</h1>
+  </section>
+
+  <script type="text/javascript">
+  function countdown(secs,surl){
+  var count_time=document.getElementById("count_time");
+  count_time.innerHTML=secs;
+    if(--secs>0){
+    setTimeout("countdown("+secs+",'"+surl+"')",1000);//设定超时时间
+    }
+    else{
+    location.href=surl;//jump url to index
+    } 
+    }
+
+  </script>
+
+
+  <script>
+    countdown(5,"index.html");    
+  </script>
+
+  
+  {{> footer}}
+</body>
+
+</html>
