@@ -4,47 +4,87 @@
 
 (defgroup blog-minimal nil
   "Easily create new blog post, with minimal theme."
-  :tag "Org to html for blog with minimal theme." :group 'org)
+  :tag "blog-minimal" :group 'org)
 
 
 ;;; easily config line start--------------------------------------------------
-(defconst bm/blog-main-dir "/home/thief/practice/org/test_blog/")
+(defcustom bm/blog-main-dir "/home/thief/practice/org/test_blog/"
+  "Your blog main dir"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/package-dir  "")
+(defcustom bm/package-dir  ""
+   "Your package dir, like ***/blog-minimal"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/mustache-templates-dir (concat bm/blog-main-dir "templates/")
-  "a dir for mustache templates")
+(defcustom bm/mustache-templates-dir (concat bm/blog-main-dir "templates/")
+  "a dir for mustache templates"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/master-name "ThankFly"
-  "It's your nickname! Please change it~")
+(defcustom bm/master-name "ThankFly"
+  "It's your nickname! Please change it~"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/avatar-path  "media/img/avatar4.png"
-  "specifify path of avatar image.")
+(defcustom bm/avatar-path  "media/img/avatar4.png"
+  "specify path of avatar image."
+  :type 'string
+  :group 'blog-minimal)
 
-(defcustom bm/github-link "https://github.com/thiefuniverse" "It's your github-link! Please change it~")
+(defcustom bm/github-link "https://github.com/thiefuniverse" "It's your github-link! Please change it~"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/page-title "Thief's Valley")
+(defcustom bm/page-title "Thief's Valley"
+  "your page title"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/author "thief")
+(defcustom bm/author "thief"
+  "your name"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/blog-email "thiefuniverses@gmail.com")
+(defcustom bm/blog-email "thiefuniverses@gmail.com"
+  "your email"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/description "Welcome to Thief's Valley!")
+(defcustom bm/description "Welcome to Thief's Valley!"
+  "your blog description"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/blog-keywords "thiefuniverse flythief")
+(defcustom bm/blog-keywords "thiefuniverse flythief"
+  "your blog keywords"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/blog-name "Thiefuniverse")
+(defcustom bm/blog-name "Thiefuniverse"
+  "your blog name"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/one-cool-sentance "Do what you want to do, love what you love.")
+(defcustom bm/one-cool-sentance "Do what you want to do, love what you love."
+  "one cool sentance"
+  :type 'string
+  :group 'blog-minimal)
 
-(defconst bm/blog-info "Blog -- for My Beautiful Life!")
+(defcustom bm/blog-info "Blog -- for My Beautiful Life!"
+  "Your blog title"
+  :type 'string
+  :group 'blog-minimal)
 
 (defvar bm/export-with-toc nil
   "config for exporting with toc or not")
 
 ;;; if you want to change to disqus, you can change this var and blog-comment.mustache
-(defvar bm/duoshuoID "thiefuniverse"
-  "your duoshuo ID")
+(defcustom bm/duoshuoID "thiefuniverse"
+  "your duoshuo ID for your duoshuo comment"
+  :type 'string
+  :group 'blog-minimal)
 
 ;;; easily config line end --------------------------------------------------
 
@@ -134,6 +174,11 @@
 
 (defun bm/set-package-dir ()
   (setq bm/package-dir (file-name-directory (symbol-file 'bm/read-org-option))))
+
+(defun bm/config-vars ()
+  "jump to blog-minimal vars files for configuration"
+  (interactive)
+  (find-file (symbol-file 'bm/set-package-dir)))
 
 (provide 'bm-vars)
 ;;; bm-vars.el ends here
