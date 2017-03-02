@@ -14,14 +14,14 @@
 can invoke function *M-x bm/change-vars* to change variables. ( I suppose that you can 
 just config your *bm/blog-main-dir* and then invoke *bm/preview-blog* to get a preview.)
 
-[[https://github.com/thiefuniverse/blog-minimal/tree/master/doc/image/config_direc.gif]]
+[[https://github.com/thiefuniverse/blog-minimal/blob/master/doc/image/config_direc.gif]]
 
-[[https://github.com/thiefuniverse/blog-minimal/tree/master/doc/image/config_group.gif]]
+[[https://github.com/thiefuniverse/blog-minimal/blob/master/doc/image/config_group.gif]]
 
 *** create a new article
     You can create a new article very easily.
 
-[[https://github.com/thiefuniverse/blog-minimal/tree/master/doc/image/create.gif]]
+[[https://github.com/thiefuniverse/blog-minimal/blob/master/doc/image/create.gif]]
 
 ** Improve
 *** If you find a bug or want to get a more beautiful feature, please contact [[mailto:thiefuniverses@gmail.com][me]]  or open a [[https://github.com/thiefuniverse/blog-minimal/issues][issue]]. :laughing:
