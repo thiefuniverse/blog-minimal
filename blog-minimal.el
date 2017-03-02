@@ -18,7 +18,7 @@
 
 (defun bm/init ()
   "init directory structure for blog minimal"
-
+  (interactive)
   (bm/set-package-dir)
   
   (if (string= bm/blog-main-dir "")
