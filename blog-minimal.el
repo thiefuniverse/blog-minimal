@@ -30,6 +30,9 @@
 (require 'bm-vars)
 (require 'bm-utils)
 
+;;; set templates dir
+(push bm/mustache-templates-dir mustache-partial-paths)
+
 
 (defun bm/init ()
   "init directory structure for blog minimal"
@@ -99,13 +102,10 @@
   
   (let ((real-org-files (bm/real-org-files)))
     (dolist (real-orgf real-org-files)
-      	(let ((buffer-name (find-file (concat bm/blog-main-dir "org/" real-orgf))))
-	  (bm/render-current-article)
-	  (kill-buffer )))))
-
-
-;;; set templates dir
-(push bm/mustache-templates-dir mustache-partial-paths)
+      (find-file  (concat bm/blog-main-dir "org/" real-orgf))
+      (bm/render-current-article)
+      (save-buffer)
+      (kill-buffer))))
 
 
 (defun bm/update-index-vars (index-or-tags)
@@ -129,7 +129,7 @@ nil return tags index"
   (bm/update-index-vars t)
 
   (let ((main-vars
-	  (ht-merge bm/header-vars bm/person-zone-vars bm/nav-vars bm/blog-index-vars)))
+	  (ht-merge bm/header-vars bm/person-zone-vars bm/nav-vars bm/blog-index-vars bm/footer-vars)))
       (bm/string-to-file (mustache-render
 		   "{{> main-index}}"
 		   main-vars)
@@ -140,7 +140,6 @@ nil return tags index"
   "transfer about.org to self-info.mustache"
   (let ((buffer-name (find-file (concat bm/blog-main-dir "about.org")))
 	(current-html (bm/org-content-to-html-file)))
-
     (copy-file current-html (concat bm/mustache-templates-dir "self-info.mustache") t)
     (delete-file current-html)
     (save-buffer)
@@ -163,7 +162,7 @@ nil return tags index"
   (ht-remove bm/header-vars "high-dir")
   
   (let ((main-vars
-	  (ht-merge bm/header-vars bm/person-zone-vars bm/nav-vars)))
+	  (ht-merge bm/header-vars bm/person-zone-vars bm/nav-vars bm/footer-vars)))
       (bm/string-to-file (mustache-render
 		   "{{> 404}}"
 		   main-vars)

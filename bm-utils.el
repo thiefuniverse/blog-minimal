@@ -68,12 +68,25 @@ mode, format the string with MODE's format settings."
 	(Bdate (split-string (ht-get Borg "date") "-")))
     (bm/comparator-date-string Adate Bdate)))
 
+(defun bm/process-html-by-regexp ()
+  "process html file for dirty output by org-html-export-to-html"
+  (beginning-of-buffer)
+  (replace-regexp "div id=\"outline-container-[a-z0-9]*\"" "div id=\"outline-container-thief\"")
+  (beginning-of-buffer)
+  (replace-regexp " id=\"org[a-z0-9]*\"" " id=\"org-thief\"")
+  (beginning-of-buffer)
+  (replace-regexp " id=\"text-org[a-z0-9]*\">" " id=\"text-org-thief\">")  )
 
 (defun bm/org-content-to-html-file ()
   ;;; TODO make it can config file name
   "transfer org file into html file, with only body."
-  (org-html-export-to-html nil nil nil t ))
-
+  (let ((export-file-name (org-html-export-to-html nil nil nil t )))
+    (with-temp-buffer
+      (insert-file-contents export-file-name)
+      (bm/process-html-by-regexp)
+      (write-file export-file-name)
+      export-file-name
+      )))
 
 (defun bm/create-date-dir (time-list)
   "create dir for blog articles by date
