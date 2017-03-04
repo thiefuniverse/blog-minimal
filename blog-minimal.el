@@ -18,69 +18,75 @@
 
 ;;; Commentary:
 
-;; see documentation at https://github.com/thiefunvierse/blog-minimal
+;; Blog-minimal is a simple static site generator based on org mode.
+;; It's so simple that others can hack it quickly and then create and
+;; modify their own sites.
 
 ;; you need add (require 'blog-minimal) to you .emacs file
-;; then config your blog vars, execute (bm/init)
+;; then config your blog-minimal-vars, execute (blog-minimal-init)
 
 
 (require 'mustache)
 (require 'ht)
+(require 's)
 (require 'simple-httpd)
-(require 'bm-vars)
-(require 'bm-utils)
+(require 'blog-minimal-vars)
+(require 'blog-minimal-utils)
 
 ;;; set templates dir
-(push bm/mustache-templates-dir mustache-partial-paths)
+;;; Code:
+
+(push blog-minimal-mustache-templates-dir mustache-partial-paths)
 
 
-(defun bm/init ()
-  "init directory structure for blog minimal"
+(defun blog-minimal-init ()
+  "Init directory structure for blog minimal."
   (interactive)
-  (bm/set-package-dir)
+  (blog-minimal-set-package-dir)
   
-  (if (string= bm/blog-main-dir "")
-      (message-box "bm/blog-main-dir is nil\n Please set a dir for your blog.")
+  (if (string= blog-minimal-blog-main-dir "")
+      (message-box "blog-minimal-blog-main-dir is nil\n Please set a dir for your blog.")
     (progn
-      (make-directory (concat bm/blog-main-dir "org") t)
-      (copy-directory (concat bm/package-dir "/templates") bm/blog-main-dir)
-      (copy-directory (concat bm/package-dir "/media") bm/blog-main-dir)
-      (copy-file (concat bm/package-dir "/about.org") bm/blog-main-dir t)
-      (bm/render-all-org-files))))
+      (make-directory (concat blog-minimal-blog-main-dir "org") t)
+      (copy-directory (concat blog-minimal-package-dir "/templates") blog-minimal-blog-main-dir)
+      (copy-directory (concat blog-minimal-package-dir "/media") blog-minimal-blog-main-dir)
+      (copy-file (concat blog-minimal-package-dir "/about.org") blog-minimal-blog-main-dir t)
+      (blog-minimal-render-all-org-files))))
 
 
-(defun bm/get-org-article-property (org-file-name)
-  "get property (with title,uri,date) from org-file"
+(defun blog-minimal-get-org-article-property (org-file-name)
+  "ORG-FILE-NAME: org-file.
+Get property (with title,uri,date) from org-file."
   (let ((pt-list (ht)))
     (with-temp-buffer
       (insert-file-contents org-file-name)
-      (ht-set pt-list "title" (bm/read-org-option "title"))
-      (ht-set pt-list "date" (bm/read-org-option "date"))
+      (ht-set pt-list "title" (blog-minimal-read-org-option "title"))
+      (ht-set pt-list "date" (blog-minimal-read-org-option "date"))
 
-;;;    you can add other property for your org file      
-      (ht-set pt-list "title-uri" (concat (bm/read-org-option "uri") ".html"))
-;;;      (ht-set pt-list "tags" (split-string  (bm/read-org-option "tags") ","))
-      (ht-set pt-list "keywords" (split-string  (bm/read-org-option "keywords") ",")))
+;;;    you can add other property for your org file.
+      (ht-set pt-list "title-uri" (concat (blog-minimal-read-org-option "uri") ".html"))
+;;;      (ht-set pt-list "tags" (split-string  (blog-minimal-read-org-option "tags") ","))
+      (ht-set pt-list "keywords" (split-string  (blog-minimal-read-org-option "keywords") ",")))
     pt-list))
 
 
-(defun bm/get--articles-property-for-index ()
-  "get all articles properties for index"
+(defun blog-minimal-get--articles-property-for-index ()
+  "Get all articles properties for index."
   (let* ((articles-property ())
-	 (org-prefix-dir (concat bm/blog-main-dir "org/"))
-	(real-org-files (bm/real-org-files)))
+	 (org-prefix-dir (concat blog-minimal-blog-main-dir "org/"))
+	(real-org-files (blog-minimal-real-org-files)))
 
     (dolist (real-org real-org-files)
-      (push (bm/get-org-article-property (concat org-prefix-dir real-org))
+      (push (blog-minimal-get-org-article-property (concat org-prefix-dir real-org))
 	    articles-property))
     
     ;;; sort org index by date
-    (sort articles-property 'bm/comparator-org-by-date)))
+    (sort articles-property 'blog-minimal-comparator-org-by-date)))
 
 
-(defun bm/real-org-files ()
-  "return real org files"
-  (let ((org-files (directory-files (concat bm/blog-main-dir "org/")))
+(defun blog-minimal-real-org-files ()
+  "Return real org files."
+  (let ((org-files (directory-files (concat blog-minimal-blog-main-dir "org/")))
 	(real-org-files ()))
     (dolist (org-file org-files)
       
@@ -92,136 +98,135 @@
     real-org-files))
 
 
-(defun bm/render-all-org-files ()
-  "render all org files"
+(defun blog-minimal-render-all-org-files ()
+  "Render all org files."
   (interactive)
-  (bm/update-vars)
-  (bm/render-main-index)
-  (bm/render-about)
-  (bm/render-404)
+  (blog-minimal-update-vars)
+  (blog-minimal-render-main-index)
+  (blog-minimal-render-about)
+  (blog-minimal-render-404)
   
-  (let ((real-org-files (bm/real-org-files)))
+  (let ((real-org-files (blog-minimal-real-org-files)))
     (dolist (real-orgf real-org-files)
-      (find-file  (concat bm/blog-main-dir "org/" real-orgf))
-      (bm/render-current-article)
+      (find-file  (concat blog-minimal-blog-main-dir "org/" real-orgf))
+      (blog-minimal-render-current-article)
       (save-buffer)
       (kill-buffer))))
 
 
-(defun bm/update-index-vars (index-or-tags)
-  "if INDEX-OR-TAGS is t, return article index \n
-nil return tags index"
-  (ht-set  bm/blog-index-vars "blog-info" bm/blog-info)
+(defun blog-minimal-update-index-vars (index-or-tags)
+  "If INDEX-OR-TAGS is t, return article index ; nil return tags index."
+  (ht-set  blog-minimal-blog-index-vars "blog-info" blog-minimal-blog-info)
 
-  (ht-remove bm/blog-index-vars "blog-index")
-;;;  (ht-remove bm/blog-index-vars "blog-tags")
+  (ht-remove blog-minimal-blog-index-vars "blog-index")
+;;;  (ht-remove blog-minimal-blog-index-vars "blog-tags")
   
   (if index-or-tags
-      (ht-set bm/blog-index-vars "blog-index" (bm/get--articles-property-for-index))
-;;;    (ht-set bm/blog-index-vars "blog-tags" (bm/get--tags-property-for-index))
+      (ht-set blog-minimal-blog-index-vars "blog-index" (blog-minimal-get--articles-property-for-index))
+;;;    (ht-set blog-minimal-blog-index-vars "blog-tags" (blog-minimal-get--tags-property-for-index))
     ))
 
 
 
-(defun bm/render-main-index ()
-  "render main index for blog minimal"
-  (ht-remove bm/header-vars "high-dir")
-  (bm/update-index-vars t)
+(defun blog-minimal-render-main-index ()
+  "Render main index for blog minimal."
+  (ht-remove blog-minimal-header-vars "high-dir")
+  (blog-minimal-update-index-vars t)
 
   (let ((main-vars
-	  (ht-merge bm/header-vars bm/person-zone-vars bm/nav-vars bm/blog-index-vars bm/footer-vars)))
-      (bm/string-to-file (mustache-render
+	  (ht-merge blog-minimal-header-vars blog-minimal-person-zone-vars blog-minimal-nav-vars blog-minimal-blog-index-vars blog-minimal-footer-vars)))
+      (blog-minimal-string-to-file (mustache-render
 		   "{{> main-index}}"
 		   main-vars)
-		      (concat bm/blog-main-dir "index.html"))))
+		      (concat blog-minimal-blog-main-dir "index.html"))))
 
 
-(defun bm/update-self-info ()
-  "transfer about.org to self-info.mustache"
-  (let ((buffer-name (find-file (concat bm/blog-main-dir "about.org")))
-	(current-html (bm/org-content-to-html-file)))
-    (copy-file current-html (concat bm/mustache-templates-dir "self-info.mustache") t)
+(defun blog-minimal-update-self-info ()
+  "Transfer about.org to self-info.mustache."
+  (let ((buffer-name (find-file (concat blog-minimal-blog-main-dir "about.org")))
+	(current-html (blog-minimal-org-content-to-html-file)))
+    (copy-file current-html (concat blog-minimal-mustache-templates-dir "self-info.mustache") t)
     (delete-file current-html)
     (save-buffer)
     (kill-buffer buffer-name)))
 
 
-(defun bm/render-about ()
-  "render about me for blog minimal"
-  (ht-remove bm/header-vars "high-dir")
-  (bm/update-self-info)
+(defun blog-minimal-render-about ()
+  "Render about me for blog minimal."
+  (ht-remove blog-minimal-header-vars "high-dir")
+  (blog-minimal-update-self-info)
   (let ((about-vars
-	  (ht-merge bm/header-vars bm/person-zone-vars bm/nav-vars bm/footer-vars)))
-      (bm/string-to-file (mustache-render
+	  (ht-merge blog-minimal-header-vars blog-minimal-person-zone-vars blog-minimal-nav-vars blog-minimal-footer-vars)))
+      (blog-minimal-string-to-file (mustache-render
 		   "{{> about}}"
 		   about-vars)
-		      (concat bm/blog-main-dir "about.html"))))
+		      (concat blog-minimal-blog-main-dir "about.html"))))
 
-(defun bm/render-404 ()
-  "render 404 for blog minimal"
-  (ht-remove bm/header-vars "high-dir")
+(defun blog-minimal-render-404 ()
+  "Render 404 for blog minimal."
+  (ht-remove blog-minimal-header-vars "high-dir")
   
   (let ((main-vars
-	  (ht-merge bm/header-vars bm/person-zone-vars bm/nav-vars bm/footer-vars)))
-      (bm/string-to-file (mustache-render
+	  (ht-merge blog-minimal-header-vars blog-minimal-person-zone-vars blog-minimal-nav-vars blog-minimal-footer-vars)))
+      (blog-minimal-string-to-file (mustache-render
 		   "{{> 404}}"
 		   main-vars)
-		      (concat bm/blog-main-dir "404.html"))))
+		      (concat blog-minimal-blog-main-dir "404.html"))))
 
 ;; TODO add tags index?  if you need it?
-;; (defun bm/render-main-tags ()
+;; (defun blog-minimal-render-main-tags ()
 ;;   "render tags index for blog minimal"
-;;   (ht-remove bm/header-vars "high-dir")
-;;   (bm/update-index-vars nil)
+;;   (ht-remove blog-minimal-header-vars "high-dir")
+;;   (blog-minimal-update-index-vars nil)
   
 ;;   (let ((main-vars
-;; 	  (ht-merge bm/header-vars bm/person-zone-vars bm/nav-vars bm/blog-index-vars)))
-;;       (bm/string-to-file (mustache-render
+;; 	  (ht-merge blog-minimal-header-vars blog-minimal-person-zone-vars blog-minimal-nav-vars blog-minimal-blog-index-vars)))
+;;       (blog-minimal-string-to-file (mustache-render
 ;; 		   "{{> main-index}}"
 ;; 		   main-vars)
-;; 			 (concat bm/blog-main-dir "about.html"))))
+;; 			 (concat blog-minimal-blog-main-dir "about.html"))))
 
 
-(defun bm/render-current-article ()
-  "render blog content for blog minimal"
+(defun blog-minimal-render-current-article ()
+  "Render blog content for blog minimal."
   (interactive)
-  (bm/post-current-article)
-  (ht-set bm/header-vars "high-dir" "../../../")
+  (blog-minimal-post-current-article)
+  (ht-set blog-minimal-header-vars "high-dir" "../../../")
   
-  (ht-set bm/content-title-vars "current-title" (bm/read-org-option "title"))
-  (ht-set bm/content-title-vars "uri" (bm/read-org-option "uri"))
+  (ht-set blog-minimal-content-title-vars "current-title" (blog-minimal-read-org-option "title"))
+  (ht-set blog-minimal-content-title-vars "uri" (blog-minimal-read-org-option "uri"))
   
-  (ht-set bm/content-title-vars "article-keywords"
+  (ht-set blog-minimal-content-title-vars "article-keywords"
 	  (let ((all-keywords ()))
-	    (dolist (keyword (split-string (bm/read-org-option "keywords") ","))
+	    (dolist (keyword (split-string (blog-minimal-read-org-option "keywords") ","))
 	      (push (ht ("keyword" keyword)) all-keywords))
 	    all-keywords))
 
   (let ((blog-vars
-	 (ht-merge bm/header-vars bm/content-title-vars bm/footer-vars bm/blog-comment-vars))
-	(date-list (split-string (bm/read-org-option "date") "-") ))
+	 (ht-merge blog-minimal-header-vars blog-minimal-content-title-vars blog-minimal-footer-vars blog-minimal-blog-comment-vars))
+	(date-list (split-string (blog-minimal-read-org-option "date") "-") ))
 
     ;;; create date dirs for articles
-    (bm/create-date-dir date-list)
+    (blog-minimal-create-date-dir date-list)
 
-    (bm/string-to-file (mustache-render
+    (blog-minimal-string-to-file (mustache-render
 		     "{{> blog-article}}"
 		     blog-vars)
 		      ;;; write html to date dir
-		    (concat bm/blog-main-dir (ht-get blog-vars "uri") ".html")))
+		    (concat blog-minimal-blog-main-dir (ht-get blog-vars "uri") ".html")))
   ;;; update main index
-  (bm/render-main-index))
+  (blog-minimal-render-main-index))
 
 
-(defun bm/post-current-article ()
-  "post current org file to blog minimal"
-  (let ((current-html (bm/org-content-to-html-file)))
-    (copy-file current-html (concat bm/mustache-templates-dir "blog-content.mustache") t)
+(defun blog-minimal-post-current-article ()
+  "Post current org file to blog minimal."
+  (let ((current-html (blog-minimal-org-content-to-html-file)))
+    (copy-file current-html (concat blog-minimal-mustache-templates-dir "blog-content.mustache") t)
     (delete-file current-html)))
 
 
-(defun bm/create-new-article ()
-  "create new article for blog minimal"
+(defun blog-minimal-create-new-article ()
+  "Create new article for blog minimal."
   (interactive)
   (let* ((title (read-string "Article Title: "))
 	 (uri (read-string "Uri: ")) ;;; automatically add date
@@ -230,9 +235,9 @@ nil return tags index"
 	 (keywords (read-string "Keywords(separated by comma and space) [,]: "))
 	 (file-name (concat (format-time-string "%Y-%m-%d-") uri ".org"))
 	 (time-list (split-string (format-time-string "%Y-%m-%d") "-"))
-	 (buffer-name (concat bm/blog-main-dir "org/" file-name)))
+	 (buffer-name (concat blog-minimal-blog-main-dir "org/" file-name)))
 
-    (bm/create-date-dir time-list)
+    (blog-minimal-create-date-dir time-list)
     (switch-to-buffer (find-file buffer-name))
     (insert (format
 	     "#+TITLE:       %s
@@ -247,20 +252,20 @@ nil return tags index"
 ;;;#+TAGS:        %s
 	     
 	     title
-	     bm/author
-	     bm/blog-email
+	     blog-minimal-author
+	     blog-minimal-blog-email
 	     (format-time-string "%Y-%m-%d")
 	     real-uri
 	     keywords
 ;;;	     tags
 	     org-export-default-language
-	     bm/export-with-toc))))
+	     blog-minimal-export-with-toc))))
 
 
-(defun bm/preview-blog ()
-  "preivew blog minimal"
+(defun blog-minimal-preview-blog ()
+  "Preivew blog minimal."
   (interactive)
-  (httpd-serve-directory bm/blog-main-dir)
+  (httpd-serve-directory blog-minimal-blog-main-dir)
   (browse-url (format "http://%s:%d" "127.0.0.1" httpd-port)))
 
 (provide 'blog-minimal)
