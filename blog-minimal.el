@@ -1,5 +1,7 @@
 ;;; blog-minimal.el --- a very simple static site generator based on org mode
 
+;; Package-Requires: ((ht "1.5") (simple-httpd "1.4.6") (mustache "0.22") (s "1.11.0"))
+
 ;;     This file is part of blog-minimal.
 
 ;;     Blog-minimal is free software: you can redistribute it and/or modify
