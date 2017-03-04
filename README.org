@@ -11,8 +11,8 @@
     Move this package to your lisp load-path.
 *** config your blog main directory
     You can use *M-x customize-group* for blog-minimal avriable configuration (also you
-can invoke function *M-x bm/change-vars* to change variables. ( I suppose that you can 
-just config your *bm/blog-main-dir* and then invoke *bm/preview-blog* to get a preview.)
+can invoke function *M-x blog-minimal-config-vars* to change variables. ( I suppose that you can 
+just config your *blog-minimal-blog-main-dir* and then invoke *blog-minimal-preview-blog* to get a preview.)
 
 [[https://github.com/thiefuniverse/blog-minimal/blob/master/doc/image/config_direc.gif]]
 
