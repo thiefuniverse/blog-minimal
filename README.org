@@ -1,4 +1,5 @@
 #+TITLE: blog-minimal
+[[http://elpa.melpa.org/#/blog-minimal][file:http://elpa.melpa.org/packages/blog-minimal-badge.svg]]
 #+OPTIONS: toc:t
 
 ** Introduction
