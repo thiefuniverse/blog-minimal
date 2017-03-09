@@ -26,6 +26,8 @@
 ;; then config your blog-minimal-vars, execute (blog-minimal-init)
 
 
+;;; Code:
+
 (require 'mustache)
 (require 'ht)
 (require 's)
