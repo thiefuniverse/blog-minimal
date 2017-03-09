@@ -1,6 +1,14 @@
-;;; bm-utils.el --- Utillity functions required by blog-minimal
+;;; blog-minimal-utils.el --- Utillity functions required by blog-minimal
+
+
+;;; Commentary:
+;; utilities for blog-minimal
+
+
+;;; Code:
 
 (require 'ht)
+(require 'org)
 (require 'blog-minimal-vars)
 
 (defun blog-minimal-read-org-option (option)
@@ -18,8 +26,9 @@ will return \"this is title\" if OPTION is \"TITLE\""
 ;;; copy from org-page:: op-util.el
 ;;; with small changes
 (defun blog-minimal-string-to-file (string file &optional mode)
-  "Write STRING into FILE, only when FILE is writable. If MODE is a valid major
-mode, format the string with MODE's format settings."
+  "STRING: string for write.
+When FILE is writable,it writes STRING into FILE.
+If MODE is a valid major mode, format the string with MODE's format settings."
   (with-temp-buffer
     (insert string)
     (save-excursion
@@ -32,8 +41,6 @@ mode, format the string with MODE's format settings."
       (setq buffer-file-coding-system 'raw-text)
       (when (file-writable-p file)
 	(write-region (point-min) (point-max) file)))))
-
-
 
 (defun blog-minimal-comparator-date-string (Adate Bdate)
   "comparator of two date list"
@@ -62,13 +69,14 @@ mode, format the string with MODE's format settings."
 
 
 (defun blog-minimal-comparator-org-by-date (Aorg Borg)
-  "comparator for org files' sort"
+  "AORG,BORG: two files for comparing.
+Comparator for org files' sort."
   (let ((Adate  (split-string (ht-get Aorg "date") "-"))
 	(Bdate (split-string (ht-get Borg "date") "-")))
     (blog-minimal-comparator-date-string Adate Bdate)))
 
 (defun blog-minimal-process-html-by-regexp ()
-  "process html file for dirty output by org-html-export-to-html"
+  "Process html file for dirty output by \"org-html-export-to-html\"."
   (beginning-of-buffer)
   (replace-regexp "div id=\"outline-container-[a-z0-9]*\"" "div id=\"outline-container-thief\"")
   (beginning-of-buffer)
@@ -78,7 +86,7 @@ mode, format the string with MODE's format settings."
 
 (defun blog-minimal-org-content-to-html-file ()
   ;;; TODO make it can config file name
-  "transfer org file into html file, with only body."
+  "Transfer org file into html file, with only body."
   (let ((export-file-name (org-html-export-to-html nil nil nil t )))
     (with-temp-buffer
       (insert-file-contents export-file-name)
@@ -88,12 +96,13 @@ mode, format the string with MODE's format settings."
       )))
 
 (defun blog-minimal-create-date-dir (time-list)
-  "create dir for blog articles by date
-   for example, date: 2018 05, then create dir 2018/05/ within dir /articles
-   time-list is (\"2018\" \"05\")
-   "
+  "TIME-LIST: time-list for create dirs.
+Create dir for blog articles by date
+for example, date: 2018 05, then create dir 2018/05/ within dir /articles.
+time-list is (\"2018\" \"05\")"
   (make-directory (concat blog-minimal-blog-main-dir "articles/" (first time-list) "/" (second time-list)) t))
 
 
 (provide 'blog-minimal-utils)
-;;; bm-utils.el ends here
+
+;;; blog-minimal-utils.el ends here

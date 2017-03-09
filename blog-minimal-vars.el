@@ -1,4 +1,10 @@
-;;; bm-vars.el -- Variable configurations required by blog-minimal
+;;; blog-minimal-vars.el -- Variable configurations required by blog-minimal
+
+
+;;; Commentary:
+;; define vars for blog-minimal
+
+;;; Code:
 
 (require 'ht)
 
@@ -9,22 +15,22 @@
 
 ;;; easily config line start--------------------------------------------------
 (defcustom blog-minimal-blog-main-dir "/home/thief/awe-website/thief-personal-blog/"
-  "Your blog main dir"
+  "Your blog main dir."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-package-dir  ""
-   "Your package dir, like ***/blog-minimal"
+   "Your package dir, like ***/blog-minimal."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-mustache-templates-dir (concat blog-minimal-blog-main-dir "templates/")
-  "A dir for mustache templates"
+  "A dir for mustache templates."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-master-name "ThankFly"
-  "It's your nickname! Please change it~"
+  "It's your nickname! Please change it~."
   :type 'string
   :group 'blog-minimal)
 
@@ -33,56 +39,57 @@
   :type 'string
   :group 'blog-minimal)
 
-(defcustom blog-minimal-github-link "https://github.com/thiefuniverse" "It's your github-link! Please change it~"
+(defcustom blog-minimal-github-link "https://github.com/thiefuniverse"
+  "It's your github-link! Please change it~."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-page-title "Thief's Valley"
-  "Your page title"
+  "Your page title."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-author "thief"
-  "Your name"
+  "Your name."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-blog-email "thiefuniverses@gmail.com"
-  "Your email"
+  "Your email."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-description "Welcome to Thief's Valley!"
-  "Your blog description"
+  "Your blog description."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-blog-keywords "thiefuniverse flythief"
-  "Your blog keywords"
+  "Your blog keywords."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-blog-name "Thiefuniverse"
-  "Your blog name"
+  "Your blog name."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-one-cool-sentance "Do what you want to do, love what you love."
-  "One cool sentance"
+  "One cool sentance."
   :type 'string
   :group 'blog-minimal)
 
 (defcustom blog-minimal-blog-info "Blog -- for My Beautiful Life!"
-  "Your blog title"
+  "Your blog title."
   :type 'string
   :group 'blog-minimal)
 
 (defvar blog-minimal-export-with-toc nil
-  "Config for exporting with toc or not")
+  "Config for exporting with toc or not.")
 
 ;;; if you want to change to disqus, you can change this var and blog-comment.mustache
 (defcustom blog-minimal-duoshuoID "thiefuniverse"
-  "Your duoshuo ID for your duoshuo comment"
+  "Your duoshuo ID for your duoshuo comment."
   :type 'string
   :group 'blog-minimal)
 
@@ -137,7 +144,7 @@
    ))
 
 (defun blog-minimal-update-vars ()
-  "update all vars for template."
+  "Update all vars for template."
 
   (setq blog-minimal-header-vars
 	(ht
@@ -154,7 +161,6 @@
 	 ("master-name" blog-minimal-master-name)
 	 ("avatar" blog-minimal-avatar-path)    ; for avatar
 	 ("one-cool-sentance" blog-minimal-one-cool-sentance)))
-
 
   (setq blog-minimal-footer-vars
 	(ht
@@ -173,18 +179,19 @@
 	 ))
   (setq blog-minimal-blog-index-vars
 	(ht
-    ;;;for blog-index
+	 ;;; for blog-index
 	 ("blog-info" blog-minimal-blog-info)
 	 )))
 
 
 (defun blog-minimal-set-package-dir ()
+  "Set package dir."
   (setq blog-minimal-package-dir (file-name-directory (symbol-file 'blog-minimal-read-org-option))))
 
 (defun blog-minimal-config-vars ()
-  "Jump to blog-minimal vars files for configuration"
+  "Jump to blog-minimal vars files for configuration."
   (interactive)
   (find-file (symbol-file 'blog-minimal-set-package-dir)))
 
 (provide 'blog-minimal-vars)
-;;; bm-vars.el ends here
+;;; blog-minimal-vars.el ends here

@@ -1,7 +1,14 @@
 ;;; blog-minimal.el --- a very simple static site generator based on org mode
 
-;;     This file is part of blog-minimal.
+;; Copyright (C) Thank Fly
+;; Author: Thank Fly <thiefuniverses@gmail.com>
+;; Version: 0.1
+;; Package-Requires: ((ht "1.5") (simple-httpd "1.4.6") (mustache "0.22") (s "1.11.0") (org "9.0.3"))
+;; Keywords: blog, org
+;; URL: https://github.com/thiefuniverse/blog-minimal
 
+
+;;     This file is part of blog-minimal.
 ;;     Blog-minimal is free software: you can redistribute it and/or modify
 ;;     it under the terms of the GNU General Public License as published by
 ;;     the Free Software Foundation, either version 3 of the License, or
@@ -36,11 +43,13 @@
 (require 'blog-minimal-utils)
 
 ;;; set templates dir
+
+
 (push blog-minimal-mustache-templates-dir mustache-partial-paths)
 
 
 (defun blog-minimal-init ()
-  "init directory structure for blog minimal"
+  "Init directory structure for blog minimal."
   (interactive)
   (blog-minimal-set-package-dir)
   
@@ -55,14 +64,15 @@
 
 
 (defun blog-minimal-get-org-article-property (org-file-name)
-  "get property (with title,uri,date) from org-file"
+  "ORG-FILE-NAME: org-file.
+Get property (with title,uri,date) from org-file."
   (let ((pt-list (ht)))
     (with-temp-buffer
       (insert-file-contents org-file-name)
       (ht-set pt-list "title" (blog-minimal-read-org-option "title"))
       (ht-set pt-list "date" (blog-minimal-read-org-option "date"))
 
-;;;    you can add other property for your org file      
+;;;    you can add other property for your org file.
       (ht-set pt-list "title-uri" (concat (blog-minimal-read-org-option "uri") ".html"))
 ;;;      (ht-set pt-list "tags" (split-string  (blog-minimal-read-org-option "tags") ","))
       (ht-set pt-list "keywords" (split-string  (blog-minimal-read-org-option "keywords") ",")))
@@ -70,7 +80,7 @@
 
 
 (defun blog-minimal-get--articles-property-for-index ()
-  "get all articles properties for index"
+  "Get all articles properties for index."
   (let* ((articles-property ())
 	 (org-prefix-dir (concat blog-minimal-blog-main-dir "org/"))
 	(real-org-files (blog-minimal-real-org-files)))
@@ -84,7 +94,7 @@
 
 
 (defun blog-minimal-real-org-files ()
-  "return real org files"
+  "Return real org files."
   (let ((org-files (directory-files (concat blog-minimal-blog-main-dir "org/")))
 	(real-org-files ()))
     (dolist (org-file org-files)
@@ -98,7 +108,7 @@
 
 
 (defun blog-minimal-render-all-org-files ()
-  "render all org files"
+  "Render all org files."
   (interactive)
   (blog-minimal-update-vars)
   (blog-minimal-render-main-index)
@@ -114,8 +124,7 @@
 
 
 (defun blog-minimal-update-index-vars (index-or-tags)
-  "if INDEX-OR-TAGS is t, return article index \n
-nil return tags index"
+  "If INDEX-OR-TAGS is t, return article index ; nil return tags index."
   (ht-set  blog-minimal-blog-index-vars "blog-info" blog-minimal-blog-info)
 
   (ht-remove blog-minimal-blog-index-vars "blog-index")
@@ -129,12 +138,13 @@ nil return tags index"
 
 
 (defun blog-minimal-render-main-index ()
-  "render main index for blog minimal"
+  "Render main index for blog minimal."
   (blog-minimal-update-vars)
   (ht-remove blog-minimal-header-vars "high-dir")
   (blog-minimal-update-index-vars t)
+
   (let ((main-vars
-	 (ht-merge blog-minimal-header-vars blog-minimal-person-zone-vars blog-minimal-nav-vars blog-minimal-blog-index-vars blog-minimal-footer-vars)))
+	  (ht-merge blog-minimal-header-vars blog-minimal-person-zone-vars blog-minimal-nav-vars blog-minimal-blog-index-vars blog-minimal-footer-vars)))
       (blog-minimal-string-to-file (mustache-render
 		   "{{> main-index}}"
 		   main-vars)
@@ -142,7 +152,7 @@ nil return tags index"
 
 
 (defun blog-minimal-update-self-info ()
-  "transfer about.org to self-info.mustache"
+  "Transfer about.org to self-info.mustache."
   (let ((buffer-name (find-file (concat blog-minimal-blog-main-dir "about.org")))
 	(current-html (blog-minimal-org-content-to-html-file)))
     (copy-file current-html (concat blog-minimal-mustache-templates-dir "self-info.mustache") t)
@@ -152,7 +162,7 @@ nil return tags index"
 
 
 (defun blog-minimal-render-about ()
-  "render about me for blog minimal"
+  "Render about me for blog minimal."
   (ht-remove blog-minimal-header-vars "high-dir")
   (blog-minimal-update-self-info)
   (let ((about-vars
@@ -163,7 +173,7 @@ nil return tags index"
 		      (concat blog-minimal-blog-main-dir "about.html"))))
 
 (defun blog-minimal-render-404 ()
-  "render 404 for blog minimal"
+  "Render 404 for blog minimal."
   (ht-remove blog-minimal-header-vars "high-dir")
   
   (let ((main-vars
@@ -188,7 +198,7 @@ nil return tags index"
 
 
 (defun blog-minimal-render-current-article ()
-  "render blog content for blog minimal"
+  "Render blog content for blog minimal."
   (interactive)
   (blog-minimal-post-current-article)
   (ht-set blog-minimal-header-vars "high-dir" "../../../")
@@ -219,14 +229,14 @@ nil return tags index"
 
 
 (defun blog-minimal-post-current-article ()
-  "post current org file to blog minimal"
+  "Post current org file to blog minimal."
   (let ((current-html (blog-minimal-org-content-to-html-file)))
     (copy-file current-html (concat blog-minimal-mustache-templates-dir "blog-content.mustache") t)
     (delete-file current-html)))
 
 
 (defun blog-minimal-create-new-article ()
-  "create new article for blog minimal"
+  "Create new article for blog minimal."
   (interactive)
   (let* ((title (read-string "Article Title: "))
 	 (uri (read-string "Uri: ")) ;;; automatically add date
@@ -263,7 +273,7 @@ nil return tags index"
 
 
 (defun blog-minimal-preview-blog ()
-  "preivew blog minimal"
+  "Preivew blog minimal."
   (interactive)
   (blog-minimal-render-main-index)
   (httpd-serve-directory blog-minimal-blog-main-dir)
