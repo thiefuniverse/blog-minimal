@@ -213,7 +213,8 @@ Get property (with title,uri,date) from org-file."
 	    all-keywords))
 
   (let ((blog-vars
-	 (ht-merge blog-minimal-header-vars blog-minimal-content-title-vars blog-minimal-footer-vars blog-minimal-blog-comment-vars))
+	 (ht-merge blog-minimal-header-vars blog-minimal-content-title-vars blog-minimal-footer-vars blog-minimal-blog-comment-vars
+		   blog-minimal-nav-vars))
 	(date-list (split-string (blog-minimal-read-org-option "date") "-") ))
 
     ;;; create date dirs for articles
