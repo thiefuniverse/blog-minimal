@@ -201,7 +201,7 @@ Get property (with title,uri,date) from org-file."
   "Render blog content for blog minimal."
   (interactive)
   (blog-minimal-post-current-article)
-  (ht-set blog-minimal-header-vars "high-dir" "../../../")
+  (ht-set blog-minimal-header-vars "high-dir" "/")
   
   (ht-set blog-minimal-content-title-vars "current-title" (blog-minimal-read-org-option "title"))
   (ht-set blog-minimal-content-title-vars "uri" (blog-minimal-read-org-option "uri"))
