@@ -28,13 +28,13 @@
 
 
 ;;; easily config line start--------------------------------------------------
-(defcustom blog-minimal-blog-main-dir (ht-get blog-minimal-config-vars "main_dir") 
+(defcustom blog-minimal-blog-main-dir (ht-get blog-minimal-config-vars "main_dir")
   "Your blog main dir."
   :type 'string
   :group 'blog-minimal
   :get  '(ht-get blog-minimal-config-vars "main_dir"))
 
-(defcustom blog-minimal-package-dir (ht-get blog-minimal-config-vars "package_dir") 
+(defcustom blog-minimal-package-dir (ht-get blog-minimal-config-vars "package_dir")
    "Your package dir, like ***/blog-minimal."
   :type 'string
   :group 'blog-minimal)
@@ -44,12 +44,12 @@
   :type 'string
   :group 'blog-minimal)
 
-(defcustom blog-minimal-master-name (ht-get blog-minimal-config-vars "master_name") 
+(defcustom blog-minimal-master-name (ht-get blog-minimal-config-vars "master_name")
   "It's your nickname! Please change it~."
   :type 'string
   :group 'blog-minimal)
 
-(defcustom blog-minimal-avatar-path (ht-get blog-minimal-config-vars "avatar_path") 
+(defcustom blog-minimal-avatar-path (ht-get blog-minimal-config-vars "avatar_path")
   "Specify path of avatar image."
   :type 'string
   :group 'blog-minimal)
@@ -59,7 +59,7 @@
   :type 'string
   :group 'blog-minimal)
 
-(defcustom blog-minimal-page-title (ht-get blog-minimal-config-vars "page_title") 
+(defcustom blog-minimal-page-title (ht-get blog-minimal-config-vars "page_title")
   "Your page title."
   :type 'string
   :group 'blog-minimal)
@@ -69,7 +69,7 @@
   :type 'string
   :group 'blog-minimal)
 
-(defcustom blog-minimal-blog-email (ht-get blog-minimal-config-vars "blog_email") 
+(defcustom blog-minimal-blog-email (ht-get blog-minimal-config-vars "blog_email")
   "Your email."
   :type 'string
   :group 'blog-minimal)
@@ -100,7 +100,7 @@
   :group 'blog-minimal)
 
 (defun update-config-info ()
-  "Update config info with user's config file"
+  "Update config info with user's config file."
   (setq blog-minimal-config-vars (let ((json-object-type 'hash-table))
 				   (json-read-file blog-minimal-config-file))
 	)
@@ -113,9 +113,9 @@
   (setq blog-minimal-author (ht-get blog-minimal-config-vars "author"))
   (setq blog-minimal-page-title (ht-get blog-minimal-config-vars "page_title"))
   (setq blog-minimal-github-link (ht-get blog-minimal-config-vars "github_link"))
-  (setq blog-minimal-avatar-path (ht-get blog-minimal-config-vars "avatar_path")) 
-  (setq blog-minimal-master-name (ht-get blog-minimal-config-vars "master_name")) 
-  (setq blog-minimal-package-dir (ht-get blog-minimal-config-vars "package_dir")) 
+  (setq blog-minimal-avatar-path (ht-get blog-minimal-config-vars "avatar_path"))
+  (setq blog-minimal-master-name (ht-get blog-minimal-config-vars "master_name"))
+  (setq blog-minimal-package-dir (ht-get blog-minimal-config-vars "package_dir"))
   
   (setq blog-minimal-blog-main-dir (ht-get blog-minimal-config-vars "main_dir"))
   (if (not (string-suffix-p "/" blog-minimal-blog-main-dir))
