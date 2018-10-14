@@ -1,12 +1,11 @@
-;;; blog-minimal.el --- a very simple static site generator based on org mode
+;;; blog-minimal.el --- a simple static site generator based on org mode
 
 ;; Copyright (C) Thank Fly
 ;; Author: Thank Fly <thiefuniverses@gmail.com>
 ;; Version: 0.1
 ;; Package-Requires: ((ht "1.5") (simple-httpd "1.4.6") (mustache "0.22") (s "1.11.0") (org "9.0.3"))
-;; Keywords: blog, org
+;; Keywords: tools
 ;; URL: https://github.com/thiefuniverse/blog-minimal
-
 
 ;;     This file is part of blog-minimal.
 ;;     Blog-minimal is free software: you can redistribute it and/or modify
