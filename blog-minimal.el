@@ -195,7 +195,7 @@ Get property (with title,uri,date) from org-file."
   (let ((target-buffer (if org-file-name
 			   (generate-new-buffer "target-buffer")
 			 (current-buffer))))
-    (with-temp-buffer
+    (save-current-buffer
       (set-buffer target-buffer)
       ;;; insert file content we invoke it with a org file name
       (if org-file-name
@@ -231,9 +231,10 @@ Get property (with title,uri,date) from org-file."
 				      blog-vars)
 		      ;;; write html to date dir
 				     (concat blog-minimal-blog-main-dir (ht-get blog-vars "uri") ".html")))
-      )
-    (kill-buffer target-buffer)
-    )
+      (if org-file-name
+	  (kill-buffer target-buffer))
+      (delete-window)))
+  
   ;;; update main index
   (blog-minimal-render-main-index))
 
