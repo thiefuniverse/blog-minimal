@@ -87,13 +87,15 @@ Comparator for org files' sort."
 (defun blog-minimal-org-content-to-html-file ()
   ;;; TODO make it can config file name
   "Transfer org file into html file, with only body."
-  (let ((export-file-name (org-html-export-to-html nil nil nil t )))
+  (interactive)
+  (let ((export-buffer (org-html-export-as-html nil nil nil t ))
+	(res-str ""))
     (with-temp-buffer
-      (insert-file-contents export-file-name)
+      (set-buffer export-buffer)
       (blog-minimal-process-html-by-regexp)
-      (write-file export-file-name)
-      export-file-name
-      )))
+      (setq res-str (buffer-string))
+      (kill-buffer))
+    res-str))
 
 (defun blog-minimal-create-date-dir (time-list)
   "TIME-LIST: time-list for create dirs.
@@ -102,6 +104,27 @@ for example, date: 2018 05, then create dir 2018/05/ within dir /articles.
 time-list is (\"2018\" \"05\")"
   (make-directory (concat blog-minimal-blog-main-dir "articles/" (first time-list) "/" (second time-list)) t))
 
+
+(defun blog-minimal-write-init-config ()
+  "Write a init config to default config path."
+  (let ((config_str "{
+    \"_comment\": \"Please type Ctrl C + ' to commit your config\",
+    \"main_dir\": \"/Users/xiefei/thief/awe-website/thiefuniverse.github.io\",
+    \"package_dir\":\"\",
+    \"master_name\":\"Thankly\",
+    \"avatar_path\":\"media/img/avatar4.png\",
+    \"github_link\":\"https://github.com/thiefuniverse\",
+    \"page_title\":\"Thief's Valley\",
+    \"author\":\"thief\",
+    \"blog_email\":\"thiefuniverses@gmail.com\",
+    \"description\":\"Welcome to Thief's Valley!\",
+    \"blog_keywords\":\"thiefuniverse flythief\",
+    \"blog_name\":\"Thiefuniverse\",
+    \"cool_sentance\":\"Do what you want to do, love what you love.\",
+    \"blog_info\":\"Blog -- for My Beautiful Life!\",
+    \"disqus_ID\":\"thiefuniverse\"
+}"))
+    (blog-minimal-string-to-file config_str blog-minimal-config-file)))
 
 (provide 'blog-minimal-utils)
 

@@ -39,7 +39,7 @@
   :type 'string
   :group 'blog-minimal)
 
-(defcustom blog-minimal-mustache-templates-dir (concat blog-minimal-blog-main-dir "templates/")
+(defcustom blog-minimal-mustache-templates-dir (concat blog-minimal-blog-main-dir "/templates/")
   "A dir for mustache templates."
   :type 'string
   :group 'blog-minimal)
@@ -116,10 +116,12 @@
   (setq blog-minimal-avatar-path (ht-get blog-minimal-config-vars "avatar_path"))
   (setq blog-minimal-master-name (ht-get blog-minimal-config-vars "master_name"))
   (setq blog-minimal-package-dir (ht-get blog-minimal-config-vars "package_dir"))
-  
+
   (setq blog-minimal-blog-main-dir (ht-get blog-minimal-config-vars "main_dir"))
   (if (not (string-suffix-p "/" blog-minimal-blog-main-dir))
-      (setq blog-minimal-blog-main-dir (concat blog-minimal-blog-main-dir "/"))))
+      (setq blog-minimal-blog-main-dir (concat blog-minimal-blog-main-dir "/")))
+  (setq  blog-minimal-mustache-templates-dir (concat blog-minimal-blog-main-dir "templates/"))
+  (setq mustache-partial-paths (list  blog-minimal-mustache-templates-dir)))
 (defvar blog-minimal-export-with-toc nil
   "Config for exporting with toc or not.")
 
@@ -234,7 +236,7 @@
     (save-current-buffer
       (set-buffer config-buffer)
       (if (not (file-exists-p blog-minimal-config-file))
-	  (copy-file "./.blog_minimal.config" blog-minimal-config-file))
+	  (blog-minimal-write-init-config))
       (insert-file-contents blog-minimal-config-file)
       )
     ;; switch config buffer and edit
@@ -250,6 +252,8 @@
   (write-region (point-min) (point-max) blog-minimal-config-file)
   (update-config-info)
   (kill-buffer)
+  (setq  mustache-partial-paths blog-minimal-mustache-templates-dir)
   (message-box "Congratulations ! Config your website done!"))
+
 (provide 'blog-minimal-vars)
 ;;; blog-minimal-vars.el ends here
